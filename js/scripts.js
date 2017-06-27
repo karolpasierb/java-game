@@ -32,6 +32,10 @@ function setGameElements() {
       break;
     case 'ended':
         newGameBtn.innerText = 'Jeszcze raz';
+        playerPickElem.innerText = 'Player selection';
+        computerPickElem.innerText = 'Computer selection';
+        playerResultElem.innerText = 'Player score';
+        computerResultElem.innerText = 'Computer score';
     case 'notStarted':
     default:
         newGameElem.style.display = 'block';
@@ -39,6 +43,8 @@ function setGameElements() {
         resultsElem.style.display = 'none';
   }
 }
+
+setGameElements();
 
 var playerPointsElem = document.getElementById('js-playerPoints'),
     playerNameElem = document.getElementById('js-playerName'),
@@ -49,22 +55,18 @@ function newGame() {
   player.name = prompt('Please enter your name', 'imię gracza');
   if (player.name) {
     player.score = computer.score = 0;
+    setGamePoints();
     gameState = 'started';
     setGameElements();
 
-    playerNameElem.innerHTML = player.name;
-    	function setGamePoints() {
-    	playerPointsElem.innerHTML = player.score;
-    	computerPointsElem.innerHTML = computer.score;
-	}
+    playerNameElem.innerHTML = player.name;    	
   }
 }
 
-function playerPick(playerPick) {
-    console.log(playerPick);
+function setGamePoints() {
+    playerPointsElem.innerHTML = player.score;
+    computerPointsElem.innerHTML = computer.score;
 }
-
-
 
 function getComputerPick() {
     var possiblePicks = ['rock', 'paper', 'scissors'];
@@ -106,7 +108,24 @@ function checkRoundWinner(playerPick, computerPick) {
     } else if (winnerIs == 'computer') {
         computerResultElem.innerHTML = "Win!";
         computer.score++;
+    } else {
+       playerResultElem.innerHTML = computerResultElem.innerHTML = "Draw!";
     }
 
+    setGamePoints();
+    endGame();
 }
 
+function endGame() {
+    if (player.score === 10) {
+        alert('Wygrywa: ' + player.name);
+        gameState = 'ended';
+        setGameElements();
+    }
+
+    if (computer.score === 10) {
+        alert('Wygrywa: komputer');
+        gameState = 'ended';
+        setGameElements();
+    }
+}
